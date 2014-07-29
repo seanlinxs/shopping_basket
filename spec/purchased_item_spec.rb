@@ -82,4 +82,66 @@ describe PurchasedItem  do
     end
   end
 
+  describe "#imported?" do
+    it "knows whether it is imported" do
+      TaxClassifier::IMPORTED.each do |i|
+        imported_item = PurchasedItem.new(1, i, 0.85)
+        expect(imported_item).to be_imported
+      end
+    end
+  end
+
+  describe "#sales_tax" do
+    context "is not exempt" do
+
+      context "is not imported" do
+        it "returns correct tax with 10% rate" do
+          item = PurchasedItem.new(1, "music cd", 14.99)
+          expect(item.sales_tax).to eql(1.5)
+          item = PurchasedItem.new(1, "music cd", 14.09)
+          expect(item.sales_tax).to eql(1.45)
+        end
+      end
+
+      context "is imported" do
+        it "returns correct tax with 15% rate" do
+          item = PurchasedItem.new(1, "imported bottle of perfume", 27.99)
+          expect(item.sales_tax).to eql(4.2)
+          item = PurchasedItem.new(1, "imported bottle of perfume", 47.50)
+          expect(item.sales_tax).to eql(7.15)
+        end
+      end
+
+    end
+
+    context "is exempt" do
+
+      context "is not imported" do
+        it "returns correct tax with 10% rate" do
+          item = PurchasedItem.new(1, "book", 12.49)
+          expect(item.sales_tax).to eql(0.0)
+          item = PurchasedItem.new(1, "chocolate bar", 0.85)
+          expect(item.sales_tax).to eql(0.0)
+        end
+      end
+
+      context "is imported" do
+        it "returns correct tax with 15% rate" do
+          item = PurchasedItem.new(1, "imported box of chocolates", 10.00)
+          expect(item.sales_tax).to eql(0.5)
+          item = PurchasedItem.new(1, "box of imported chocolates", 11.25)
+          expect(item.sales_tax).to eql(0.6)
+        end
+      end
+
+    end
+  end
+
+  describe "#to_s" do
+    it "returns correct item detail" do
+      item = PurchasedItem.new(1, "music cd", 14.99)
+      expect(item.to_s).to eql("1, music cd, 16.49")
+    end
+  end
+
 end

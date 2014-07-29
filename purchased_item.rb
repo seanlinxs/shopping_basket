@@ -22,4 +22,36 @@ class PurchasedItem
   def tax_exempt?
     food? || book? || medical_product?
   end
+
+  def imported?
+    TaxClassifier::IMPORTED.include?(self.name)
+  end
+
+  def sales_tax
+    if tax_exempt?
+      if imported?
+        tax_rate = 0.05
+      else
+        tax_rate = 0
+      end
+    else
+      if imported?
+        tax_rate = 0.15
+      else
+        tax_rate = 0.1
+      end
+    end
+
+    # round up to nearest 0.05
+    (qty * price * tax_rate * 20).ceil / 20.0
+  end
+
+  def price_including_tax
+    (price * 100 + sales_tax * 100) / 100.0
+  end
+
+  def to_s
+    "#{qty}, #{name}, #{price_including_tax}"
+  end
+
 end
