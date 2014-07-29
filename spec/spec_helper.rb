@@ -6,7 +6,8 @@ require 'csv'
 def scan_items(input_file)
   items = []
   CSV.foreach(input_file) do |row|
-    qty, name, price = row
+    next if row == ["Quantity"," Product"," Price"]
+    qty, name, price = row 
     qty = qty.to_i
     name = name.strip
     price = price.to_f
