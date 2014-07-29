@@ -11,6 +11,24 @@ describe PurchasedItem  do
     end
   end
 
+  describe "#qty" do
+    it "returns correct qty value" do
+      expect(@purchased_item.qty).to eql(1)
+    end
+  end
+
+  describe "#name" do
+    it "returns correct name" do
+      expect(@purchased_item.name).to eql("PurchasedItem")
+    end
+  end
+
+  describe "#price" do
+    it "returns correct price" do
+      expect(@purchased_item.price).to eql(12.49)
+    end
+  end
+
   describe "#food?" do
     it "knows whether it is food" do
       TaxClassifier::FOOD.each do |f|
