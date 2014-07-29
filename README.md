@@ -3,7 +3,7 @@ README
 # How to run the command line app:
 ruby main.rb path_to_input_file
 
-The input file look like:
+The input file looks like:
 
     Quantity, Product, Price
     1, book, 12.49
