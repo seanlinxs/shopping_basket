@@ -1,3 +1,5 @@
+require 'bigdecimal'
+
 class PurchasedItem
   attr_accessor :qty, :name, :price
   
@@ -47,11 +49,11 @@ class PurchasedItem
   end
 
   def price_including_tax
-    (price * 100 + sales_tax * 100) / 100.0
+    (qty * BigDecimal(price.to_s) + BigDecimal(sales_tax.to_s)).to_f
   end
 
   def to_s
-    "#{qty}, #{name}, #{price_including_tax}"
+    "#{qty}, #{name}, %.2f" % price_including_tax
   end
 
 end
