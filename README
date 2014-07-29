@@ -1,0 +1,4 @@
+README
+
+How to run the command line app:
+ruby main.rb path_to_input_file
