@@ -1,4 +1,5 @@
 require 'bigdecimal'
+require_relative 'tax_classifier'
 
 class PurchasedItem
   attr_accessor :qty, :name, :price
@@ -9,41 +10,9 @@ class PurchasedItem
     @price = price
   end
 
-  def food?
-    TaxClassifier::FOOD.include?(self.name)
-  end
-
-  def book?
-    TaxClassifier::BOOKS.include?(self.name)
-  end
-
-  def medical_product?
-    TaxClassifier::MEDICAL_PRODUCTS.include?(self.name)
-  end
-
-  def tax_exempt?
-    food? || book? || medical_product?
-  end
-
-  def imported?
-    TaxClassifier::IMPORTED.include?(self.name)
-  end
+  include TaxClassifier
 
   def sales_tax
-    if tax_exempt?
-      if imported?
-        tax_rate = 0.05
-      else
-        tax_rate = 0
-      end
-    else
-      if imported?
-        tax_rate = 0.15
-      else
-        tax_rate = 0.1
-      end
-    end
-
     # round up to nearest 0.05
     (qty * price * tax_rate * 20).ceil / 20.0
   end
